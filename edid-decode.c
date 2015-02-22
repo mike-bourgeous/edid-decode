@@ -618,7 +618,7 @@ cea_audio_block(unsigned char *x)
     for (i = 1; i < length; i += 3) {
 	format = (x[i] & 0x78) >> 3;
 	printf("    %s, max channels %d\n", audio_format(format),
-	       x[i] & 0x07);
+	       (x[i] & 0x07) + 1);
 	printf("    Supported sample rates (kHz):%s%s%s%s%s%s%s\n",
 	       (x[i+1] & 0x40) ? " 192" : "",
 	       (x[i+1] & 0x20) ? " 176.4" : "",
