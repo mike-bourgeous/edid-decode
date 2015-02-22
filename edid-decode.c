@@ -629,12 +629,41 @@ cea_audio_block(unsigned char *x)
 	       (x[i+1] & 0x01) ? " 32" : "");
 	if (format == 1) {
 	    printf("    Supported sample sizes (bits):%s%s%s\n",
-		  (x[i + 2] & 0x04) ? " 24" : "",
-		  (x[i + 2] & 0x02) ? " 20" : "",
-		  (x[i + 2] & 0x01) ? " 16" : "");
+		  (x[i+2] & 0x04) ? " 24" : "",
+		  (x[i+2] & 0x02) ? " 20" : "",
+		  (x[i+2] & 0x01) ? " 16" : "");
 	} else if (format <= 8) {
-	    printf("    Maximum bit rate: %d kbit/s\n", x[i + 2] * 8);
+	    printf("    Maximum bit rate: %d kbit/s\n", x[i+2] * 8);
 	}
+    }
+}
+
+static void
+speaker_allocation_block(unsigned char *x)
+{
+    if(x[1] & 0x01) {
+	printf("    Front Left/Front Right\n");
+    }
+    if(x[1] & 0x02) {
+	printf("    LFE\n");
+    }
+    if(x[1] & 0x04) {
+	printf("    Front Center\n");
+    }
+    if(x[1] & 0x08) {
+	printf("    Rear Left/Rear Right\n");
+    }
+    if(x[1] & 0x10) {
+	printf("    Rear Center\n");
+    }
+    if(x[1] & 0x20) {
+	printf("    Front Left Center/Front Right Center\n");
+    }
+    if(x[1] & 0x40) {
+	printf("    Rear Left Center/Rear Right Center\n");
+    }
+    if(x[1] & 0x80) {
+	printf("    [RESERVED]\n");
     }
 }
 
@@ -968,6 +997,7 @@ cea_block(unsigned char *x)
 	    break;
 	case 0x04:
 	    printf("  Speaker allocation data block\n");
+	    speaker_allocation_block(x);
 	    break;
 	case 0x05:
 	    printf("  VESA DTC data block\n");
